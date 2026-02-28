@@ -8,17 +8,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    # - name: Check .NET 8
-    #   id: check-dotnet8
-    #   run: |
-    #     DOTNET8_VERSION=$(dotnet --version)
-    #     if [[ "$DOTNET8_VERSION" =~ ^8\.0\.[0-9]+$ ]]; then
-    #       echo "dotnet8_installed=true" >> $GITHUB_ENV
-    #     else
-    #       echo "dotnet8_installed=false" >> $GITHUB_ENV
-    #     fi
+    - name: Check .NET 10
+      id: check-dotnet10
+      run: |
+        dotnet --version
+        echo -------------------------------
+        MY_DOTNET_VERSION=$(dotnet --version)
+        if [[ "$MY_DOTNET_VERSION" =~ ^10\.0\.[0-9]+$ ]]; then
+          echo "dotnet10_installed=true" >> $GITHUB_ENV
+        else
+          echo "dotnet10_installed=false" >> $GITHUB_ENV
+        fi
     - name: Setup .NET 10
-      # if: env.dotnet8_installed == 'false'
+      if: env.dotnet10_installed == 'false'
       uses: actions/setup-dotnet@v5 # https://github.com/actions/setup-dotnet
       with:
         dotnet-version: 10.0.x
@@ -156,12 +158,12 @@ jobs:
         file_a="coveragereport-a/SummaryGithub.md"
         md='| _Coverage Matrix_ | Line | Branch |'$'\n'
         md+='| - | - | - |'$'\n'
-        line=$(grep -F "|**Ocelot.Administration.IdentityServer4**|" $file_u)
-        line="${line/Ocelot.Administration.IdentityServer4/Unit}"
+        line=$(grep -F "|**Ocelot.Cache.CacheManager**|" $file_u)
+        line="${line/Ocelot.Cache.CacheManager/Unit}"
         line="${line//\*\*/ }"
         md+=$line$'\n'
-        line=$(grep -F "|**Ocelot.Administration.IdentityServer4**|" $file_a)
-        line="${line/Ocelot.Administration.IdentityServer4/Acceptance}"
+        line=$(grep -F "|**Ocelot.Cache.CacheManager**|" $file_a)
+        line="${line/Ocelot.Cache.CacheManager/Acceptance}"
         line="${line//\*\*/ }"
         md+=$line$'\n'$'\n'
         md+='---'$'\n'
