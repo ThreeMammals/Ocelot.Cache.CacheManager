@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="acceptance/Ocelot.Cache.CacheManager.Acceptance.csproj" />
   <Project Path="src/Ocelot.Cache.CacheManager.csproj" />
   <Project Path="unit/Ocelot.Cache.CacheManager.UnitTests.csproj" />
 </Solution>
