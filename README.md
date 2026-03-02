@@ -3,6 +3,7 @@
 # Ocelot.Cache.CacheManager
 [![Release](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/actions/workflows/release.yml/badge.svg)](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/actions/workflows/release.yml)
 [![Publish](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/actions/workflows/publish.yml/badge.svg)](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/actions/workflows/publish.yml)
+[![codecov](https://codecov.io/gh/ThreeMammals/Ocelot.Cache.CacheManager/graph/badge.svg?token=0nlrvC6g9K)](https://codecov.io/gh/ThreeMammals/Ocelot.Cache.CacheManager)
 [![NuGet](https://img.shields.io/nuget/v/Ocelot.Cache.CacheManager?logo=nuget&label=NuGet&color=blue)](https://www.nuget.org/packages/Ocelot.Cache.CacheManager/ "Download Ocelot.Cache.CacheManager from NuGet.org")
 [![Downloads](https://img.shields.io/nuget/dt/Ocelot.Cache.CacheManager?logo=nuget&label=Downloads)](https://www.nuget.org/packages/Ocelot.Cache.CacheManager/ "Total Ocelot.Cache.CacheManager downloads from NuGet.org")
 
