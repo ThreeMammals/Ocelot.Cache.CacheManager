@@ -202,7 +202,6 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         slug: ThreeMammals/Ocelot.Cache.CacheManager
-        fail_ci_if_error: true
         files: ${{ steps.files.outputs.UNIT_COVERAGE_FILE }}
         flags: unit
       continue-on-error: true
@@ -231,17 +230,17 @@ jobs:
 
       - name: README.md
         run: |
-          echo Original README.md
-          echo ------------------------
+          echo "::group::Original README.md"
           cat README.md
+          echo "::endgroup::"
           echo ------------------------
           # Replaces relative GitHub paths with NuGet-friendly absolute URLs
           sed -i 's|/ocelot_icon.png|https://raw.githubusercontent.com/ThreeMammals/Ocelot.Cache.CacheManager/refs/heads/main/ocelot_icon.png|g; s|/cachemanager_icon.png|https://raw.githubusercontent.com/ThreeMammals/Ocelot.Cache.CacheManager/refs/heads/main/cachemanager_icon.png|g' README.md
           # Removes tags <sub> and </sub>
           sed -i 's/<\/\?sub>//g' README.md
-          echo New content of README.md
-          echo ------------------------
+          echo "::group::New content of README.md"
           cat README.md
+          echo "::endgroup::"
 
       - name: Restore dependencies
         run: dotnet restore ./Ocelot.Cache.CacheManager.slnx
