@@ -30,8 +30,9 @@
     <Copyright>© 2026 Three Mammals. MIT licensed OSS</Copyright>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath="\" />
-    <None Include="..\ocelot_icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\LICENSE" Pack="true" PackagePath="\" Link="package\LICENSE" />
+    <None Include="..\ocelot_icon.png" Pack="true" PackagePath="\" Link="package\ocelot_icon.png" />
+    <None Include="..\README.md" Pack="true" PackagePath="\" Link="package\README.md" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ocelot" Version="25.0.0-beta.1" />
