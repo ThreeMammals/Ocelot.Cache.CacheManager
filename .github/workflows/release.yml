@@ -1,5 +1,5 @@
 # Releases non-beta versions, without 'beta*' suffix
-name: Release Package
+name: Release
 on:
   push:
     tags:

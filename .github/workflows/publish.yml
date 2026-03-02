@@ -1,5 +1,5 @@
 # Publishes beta-versions only
-name: Package
+name: Publish
 on:
   push:
     branches:
