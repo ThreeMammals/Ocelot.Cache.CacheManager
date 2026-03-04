@@ -19,7 +19,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="xunit.v3" Version="3.2.2" />
-    <PackageReference Include="Ocelot.Testing" Version="25.0.0-beta.2" />
+    <PackageReference Include="Ocelot.Testing" Version="25.0.0-beta.3" />
   </ItemGroup>
 
   <ItemGroup>

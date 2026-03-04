@@ -5,11 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Ocelot.Configuration;
 using Ocelot.Configuration.File;
 using Ocelot.DependencyInjection;
+using Ocelot.Testing;
 using System.Reflection;
 
 namespace Ocelot.Cache.CacheManager.UnitTests;
 
-public class OcelotBuilderExtensionsTests : UnitTest
+public class OcelotBuilderExtensionsTests : Unit
 {
     private readonly IServiceCollection _services;
     private readonly IConfiguration _configRoot;

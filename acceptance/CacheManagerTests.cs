@@ -129,7 +129,7 @@ public sealed class CacheManagerTests : AcceptanceSteps
             EnableContentHashing = true,
         };
         var (testBody1String, testBody2String) = TestBodiesFactory();
-        var configuration = GivenFileConfiguration(port, options, asGlobalConfig);
+        var configuration = GivenFileConfiguration(port, options, asGlobalConfig, HttpMethods.Post);
 
         this.Given(x => x.GivenThereIsAnEchoServiceRunningOn(port))
             .And(x => GivenThereIsAConfiguration(configuration))
@@ -163,7 +163,7 @@ public sealed class CacheManagerTests : AcceptanceSteps
             TtlSeconds = 100,
         };
         var (testBody1String, testBody2String) = TestBodiesFactory();
-        var configuration = GivenFileConfiguration(port, options, asGlobalConfig);
+        var configuration = GivenFileConfiguration(port, options, asGlobalConfig, HttpMethods.Post);
 
         this.Given(x => x.GivenThereIsAnEchoServiceRunningOn(port))
             .And(x => GivenThereIsAConfiguration(configuration))
@@ -223,12 +223,14 @@ public sealed class CacheManagerTests : AcceptanceSteps
             .BDDfy();
     }
 
-    private FileConfiguration GivenFileConfiguration(int port, FileCacheOptions cacheOptions, bool asGlobalConfig = false)
+    private FileConfiguration GivenFileConfiguration(int port, FileCacheOptions cacheOptions, bool asGlobalConfig = false, params string[] methods)
     {
-        var r = GivenRoute(port) as FileRoute;
-        r!.CacheOptions = asGlobalConfig ? new() { TtlSeconds = cacheOptions.TtlSeconds } : cacheOptions;
-        var c = GivenConfiguration(r) as FileConfiguration;
-        c!.GlobalConfiguration = !asGlobalConfig ? null :
+        var r = GivenRoute(port);
+        r.CacheOptions = asGlobalConfig ? new() { TtlSeconds = cacheOptions.TtlSeconds } : cacheOptions;
+        foreach (var m in methods)
+            r.UpstreamHttpMethod.Add(m);
+        var c = GivenConfiguration(r);
+        c.GlobalConfiguration = !asGlobalConfig ? null :
             new()
             {
                 CacheOptions = new(cacheOptions),

@@ -1,8 +1,9 @@
 ﻿using CacheManager.Core;
+using Ocelot.Testing;
 
 namespace Ocelot.Cache.CacheManager.UnitTests;
 
-public class OcelotCacheManagerCacheTests : UnitTest
+public class OcelotCacheManagerCacheTests : Unit
 {
     private readonly Mock<ICacheManager<string>> _manager;
     private readonly OcelotCacheManagerCache<string> _cacheManager;

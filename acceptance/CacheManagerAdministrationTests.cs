@@ -10,6 +10,7 @@ using Ocelot.Configuration.Repository;
 using Ocelot.DependencyInjection;
 using Ocelot.Infrastructure.Extensions;
 using Ocelot.Middleware;
+using Ocelot.Testing.Authentication;
 using System.Net;
 using System.Runtime.CompilerServices;
 

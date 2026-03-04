@@ -4,12 +4,13 @@ using Ocelot.Configuration;
 using Ocelot.Configuration.Builder;
 using Ocelot.Logging;
 using Ocelot.Middleware;
+using Ocelot.Testing;
 using System.Net;
 using System.Net.Http.Headers;
 
 namespace Ocelot.Cache.CacheManager.UnitTests;
 
-public class OutputCacheMiddlewareRealCacheTests : UnitTest
+public class OutputCacheMiddlewareRealCacheTests : Unit
 {
     private readonly OcelotCacheManagerCache<CachedResponse> _cacheManager;
     private readonly ICacheKeyGenerator _cacheKeyGenerator;
