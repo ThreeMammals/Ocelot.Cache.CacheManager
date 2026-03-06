@@ -8,7 +8,6 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <AssemblyName>Ocelot.Cache.CacheManager.$(Version)</AssemblyName>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>CS1591</NoWarn>
 
@@ -17,7 +16,7 @@
     <PackageId>Ocelot.Cache.CacheManager</PackageId>
     <PackageDescription>Provides Ocelot extensions to use CacheManager.NET</PackageDescription>
     <PackageReleaseNotes>https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/releases</PackageReleaseNotes>
-    <PackageTags>ocelot;cachemanager;cache</PackageTags>
+    <PackageTags>ocelot;cache;cachemanager</PackageTags>
     <PackageIcon>ocelot_icon.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/ThreeMammals/Ocelot/assets/images/ocelot_icon_128x128.png</PackageIconUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>

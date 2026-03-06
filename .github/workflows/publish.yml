@@ -165,12 +165,12 @@ jobs:
         file_a="coveragereport-a/SummaryGithub.md"
         md='| _Coverage Matrix_ | Line | Branch |'$'\n'
         md+='| - | - | - |'$'\n'
-        line=$(grep -F "|**Ocelot.Cache.CacheManager.**|" $file_u)
-        line="${line/Ocelot.Cache.CacheManager./Unit}"
+        line=$(grep -F "|**Ocelot.Cache.CacheManager**|" $file_u)
+        line="${line/Ocelot.Cache.CacheManager/Unit}"
         line="${line//\*\*/ }"
         md+=$line$'\n'
-        line=$(grep -F "|**Ocelot.Cache.CacheManager.**|" $file_a)
-        line="${line/Ocelot.Cache.CacheManager./Acceptance}"
+        line=$(grep -F "|**Ocelot.Cache.CacheManager**|" $file_a)
+        line="${line/Ocelot.Cache.CacheManager/Acceptance}"
         line="${line//\*\*/ }"
         md+=$line$'\n'$'\n'
         md+='---'$'\n'
