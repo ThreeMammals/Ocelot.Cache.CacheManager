@@ -14,9 +14,9 @@ public class OcelotBuilderExtensionsTests : Unit
 {
     private readonly IServiceCollection _services;
     private readonly IConfiguration _configRoot;
-    private IOcelotBuilder? _ocelotBuilder;
+    private IOcelotBuilder _ocelotBuilder;
     private readonly int _maxRetries;
-    private Exception? _ex;
+    private Exception _ex;
 
     public override CancellationToken CancelMe => TestContext.Current.CancellationToken;
 
@@ -52,7 +52,7 @@ public class OcelotBuilderExtensionsTests : Unit
     {
         var outputCache = _services.Single(x => x.ServiceType == typeof(IOcelotCache<CachedResponse>));
         var outputCacheManager = _services.Single(x => x.ServiceType == typeof(ICacheManager<CachedResponse>));
-        var instance = (ICacheManager<CachedResponse>)outputCacheManager.ImplementationInstance!;
+        var instance = (ICacheManager<CachedResponse>)outputCacheManager.ImplementationInstance;
         var ocelotConfigCache = _services.Single(x => x.ServiceType == typeof(IOcelotCache<IInternalConfiguration>));
         var ocelotConfigCacheManager = _services.Single(x => x.ServiceType == typeof(ICacheManager<IInternalConfiguration>));
         var fileConfigCache = _services.Single(x => x.ServiceType == typeof(IOcelotCache<FileConfiguration>));

@@ -21,12 +21,12 @@ jobs:
         fi
     - name: Setup .NET 10
       if: env.dotnet10_installed == 'false'
-      uses: actions/setup-dotnet@v5 # https://github.com/actions/setup-dotnet
+      uses: actions/setup-dotnet@v6 # https://github.com/actions/setup-dotnet
       with:
         dotnet-version: 10.0.x
         dotnet-quality: 'ga'
     - name: Checkout
-      uses: actions/checkout@v6 # https://github.com/actions/checkout
+      uses: actions/checkout@v7 # https://github.com/actions/checkout
     - name: Restore
       run: dotnet restore ./Ocelot.Cache.CacheManager.slnx -p:TargetFramework=net10.0
     - name: Build
@@ -116,14 +116,14 @@ jobs:
     # Docs: https://reportgenerator.io/
     - name: Generate coverage report (Unit)
       if: steps.files.outputs.UNIT_COVERAGE_FILE_EXISTS == 'true'
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.1 # Docs: https://github.com/marketplace/actions/reportgenerator
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.10 # Docs: https://github.com/marketplace/actions/reportgenerator
       with:
         reports: ${{ steps.files.outputs.UNIT_COVERAGE_FILE }}
         targetdir: coveragereport-u
         reporttypes: HtmlInline;MarkdownSummaryGithub
     - name: Generate coverage report (Acceptance)
       if: steps.files.outputs.ACCEPTANCE_COVERAGE_FILE_EXISTS == 'true'
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.1 # Docs: https://github.com/marketplace/actions/reportgenerator
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.10 # Docs: https://github.com/marketplace/actions/reportgenerator
       with:
         reports: ${{ steps.files.outputs.ACCEPTANCE_COVERAGE_FILE }}
         targetdir: coveragereport-a
@@ -138,13 +138,13 @@ jobs:
     # DOCS Storing and sharing data from a workflow -> https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/storing-and-sharing-data-from-a-workflow
     - name: Upload artifacts of coverage report (Unit)
       if: steps.files.outputs.UNIT_COVERAGE_FILE_EXISTS == 'true' && success()
-      uses: actions/upload-artifact@v4 # https://github.com/actions/upload-artifact
+      uses: actions/upload-artifact@v7 # https://github.com/actions/upload-artifact
       with:
         name: CoverageReport-UnitTests # artifact name
         path: coveragereport-u # directory containing files to upload
     - name: Upload artifacts of coverage report (Acceptance)
       if: steps.files.outputs.ACCEPTANCE_COVERAGE_FILE_EXISTS == 'true' && success()
-      uses: actions/upload-artifact@v4 # https://github.com/actions/upload-artifact
+      uses: actions/upload-artifact@v7 # https://github.com/actions/upload-artifact
       with:
         name: CoverageReport-AcceptanceTests # artifact name
         path: coveragereport-a # directory containing files to upload
@@ -198,13 +198,22 @@ jobs:
       shell: bash
     - name: Codecov
       if: steps.files.outputs.UNIT_COVERAGE_FILE_EXISTS == 'true' && success()
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v7 # https://github.com/codecov/codecov-action
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         slug: ThreeMammals/Ocelot.Cache.CacheManager
         files: ${{ steps.files.outputs.UNIT_COVERAGE_FILE }}
         flags: unit
-      continue-on-error: true
+        disable_search: true
+    - name: Codecov 2
+      if: steps.files.outputs.ACCEPTANCE_COVERAGE_FILE_EXISTS == 'true' && success()
+      uses: codecov/codecov-action@v7 # https://github.com/codecov/codecov-action
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        slug: ThreeMammals/Ocelot.Cache.CacheManager
+        files: ${{ steps.files.outputs.ACCEPTANCE_COVERAGE_FILE }}
+        flags: accept
+        disable_search: true
 
   publish:
     needs: build
@@ -216,7 +225,7 @@ jobs:
       - name: .NET Version
         run: dotnet --version
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             8.0.x
@@ -226,7 +235,7 @@ jobs:
         run: dotnet --info
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: README.md
         run: |
@@ -246,7 +255,7 @@ jobs:
         run: dotnet restore ./Ocelot.Cache.CacheManager.slnx
 
       - name: Pack project
-        run: dotnet pack ./src/Ocelot.Cache.CacheManager.csproj --configuration Release --output ./packages /p:ContinuousIntegrationBuild=true
+        run: dotnet pack ./src/Ocelot.Cache.CacheManager.csproj --no-restore --configuration Release --output ./packages /p:ContinuousIntegrationBuild=true
 
       - name: Publish to GitHub Packages
         run: dotnet nuget push ./packages/*.nupkg --source "https://nuget.pkg.github.com/ThreeMammals/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate

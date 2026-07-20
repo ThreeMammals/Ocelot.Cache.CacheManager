@@ -56,7 +56,7 @@ public sealed class CacheManagerAdministrationTests : AuthenticationSteps
 
         //await WhenIGetUrlOnTheApiGateway("/");
         //ThenTheStatusCodeShouldBeOK(); // currently HttpStatusCode.BadGateway
-        response = await ocelotClient!.DeleteAsync($"{AdminPath}/outputcache/{TestName()}", /*Xunit.TestContext.Current.CancellationToken*/_cts.Token);
+        response = await ocelotClient.DeleteAsync($"{AdminPath}/outputcache/{TestName()}", /*Xunit.TestContext.Current.CancellationToken*/_cts.Token);
         ThenTheStatusCodeShouldBe(HttpStatusCode.NoContent); // currently HttpStatusCode.Unauthorized
     }
 
@@ -123,7 +123,7 @@ public static class OcelotBuilderExtensions
     public static Task GetOcelotMiddlewareConfiguration(IApplicationBuilder builder)
     {
         var repo = builder.ApplicationServices.GetService<IInternalConfigurationRepository>();
-        var config = repo!.Get();
+        var config = repo?.Get();
         var administrationPath = config?.AdministrationPath ?? string.Empty;
         var administration = builder.ApplicationServices.GetService<IAdministrationPath>();
         if (administration?.ExternalJwtSigningUrl != null)

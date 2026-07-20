@@ -81,9 +81,9 @@ public class OcelotCacheManagerCacheTests : Unit
     public void TryGetValue(bool isNull)
     {
         // Arrange
-        CacheItem<string>? item = isNull ? null : new CacheItem<string>("keyX", "valueX");
+        CacheItem<string> item = isNull ? null : new CacheItem<string>("keyX", "valueX");
         _manager.Setup(x => x.GetCacheItem(It.IsAny<string>(), It.IsAny<string>()))
-            .Returns(item!);
+            .Returns(item);
 
         // Act
         var actual = _cacheManager.TryGetValue("keyX", "someRegion", out var actualValue);

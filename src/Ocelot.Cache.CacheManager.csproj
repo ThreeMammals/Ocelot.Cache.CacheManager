@@ -2,8 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-
+    <Nullable>disable</Nullable>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -11,7 +10,7 @@
     <NoWarn>CS1591</NoWarn>
 
     <!--Package properties-->
-    <Version>25.0.0-beta.3</Version>
+    <Version>25.0.0-beta.4</Version>
     <PackageId>Ocelot.Cache.CacheManager</PackageId>
     <PackageDescription>Provides Ocelot extensions to use CacheManager.NET</PackageDescription>
     <PackageReleaseNotes>https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/releases</PackageReleaseNotes>
