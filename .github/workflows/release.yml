@@ -71,7 +71,7 @@ jobs:
       - name: README.md
         run: |
           # Replaces relative GitHub paths with NuGet-friendly absolute URLs
-          sed -i 's|/ocelot_icon.png|https://raw.githubusercontent.com/ThreeMammals/Ocelot.Cache.CacheManager/refs/heads/main/ocelot_icon.png|g; s|/cachemanager_icon.png|https://raw.githubusercontent.com/ThreeMammals/Ocelot.Cache.CacheManager/refs/heads/main/cachemanager_icon.png|g' README.md
+          sed -i 's|/.config/ocelot_icon.png|https://raw.githubusercontent.com/ThreeMammals/Ocelot.Cache.CacheManager/main/.config/ocelot_icon.png|g; s|/.config/cachemanager_icon.png|https://raw.githubusercontent.com/ThreeMammals/Ocelot.Cache.CacheManager/main/.config/cachemanager_icon.png|g' README.md
           # Removes tags <sub> and </sub>
           sed -i 's/<\/\?sub>//g' README.md
           echo "::group::New content of README.md"

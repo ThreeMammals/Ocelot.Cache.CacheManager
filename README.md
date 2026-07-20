@@ -1,5 +1,5 @@
-![Ocelot Icon](/ocelot_icon.png "Ocelot Icon")
-![CacheManager Logo](/cachemanager_icon.png "CacheManager Logo")
+![Ocelot Icon](/.config/ocelot_icon.png "Ocelot Icon")
+![CacheManager Logo](/.config/cachemanager_icon.png "CacheManager Logo")
 # Ocelot.Cache.CacheManager
 [![Release](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/actions/workflows/release.yml/badge.svg)](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/actions/workflows/release.yml)
 [![Publish](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/actions/workflows/publish.yml/badge.svg)](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/actions/workflows/publish.yml)
