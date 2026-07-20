@@ -20,6 +20,8 @@ public class OutputCacheMiddlewareRealCacheTests : Unit
     private readonly Mock<IOcelotLogger> _logger;
     private readonly DefaultHttpContext _httpContext;
 
+    public override CancellationToken CancelMe => TestContext.Current.CancellationToken;
+
     public OutputCacheMiddlewareRealCacheTests()
     {
         _httpContext = new DefaultHttpContext();

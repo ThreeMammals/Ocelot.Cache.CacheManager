@@ -18,12 +18,7 @@ namespace Ocelot.Cache.CacheManager.Acceptance;
 
 public sealed class CacheManagerAdministrationTests : AuthenticationSteps
 {
-    private readonly CancellationTokenSource _cts;
-
-    public CacheManagerAdministrationTests() : base()
-    {
-        _cts = new();
-    }
+    private readonly CancellationTokenSource _cts = new();
 
     [Fact(
         DisplayName = "TODO " + nameof(ShouldClearCacheRegionViaAdministrationAPI),
@@ -51,7 +46,7 @@ public sealed class CacheManagerAdministrationTests : AuthenticationSteps
             WithBasicConfiguration, // Action<WebHostBuilderContext, IConfigurationBuilder> configureDelegate,
             s => WithCacheManagerAndAdministrationForExternalJwtServer(s, AdminPath), // Action<IServiceCollection> configureServices,
             WithUseOcelot, // Action<IApplicationBuilder> configureApp,
-            null, null, null, null);
+            null, null, null);
         bool isExternal = true;
         await GivenThereIsExternalJwtSigningService([OcelotScopes.OcAdmin], /*Xunit.TestContext.Current.CancellationToken*/ _cts.Token);
         var token = await GivenIHaveATokenWithUrlPath(
@@ -61,7 +56,7 @@ public sealed class CacheManagerAdministrationTests : AuthenticationSteps
 
         //await WhenIGetUrlOnTheApiGateway("/");
         //ThenTheStatusCodeShouldBeOK(); // currently HttpStatusCode.BadGateway
-        response = await ocelotClient.DeleteAsync($"{AdminPath}/outputcache/{TestName()}", /*Xunit.TestContext.Current.CancellationToken*/_cts.Token);
+        response = await ocelotClient!.DeleteAsync($"{AdminPath}/outputcache/{TestName()}", /*Xunit.TestContext.Current.CancellationToken*/_cts.Token);
         ThenTheStatusCodeShouldBe(HttpStatusCode.NoContent); // currently HttpStatusCode.Unauthorized
     }
 
@@ -128,14 +123,14 @@ public static class OcelotBuilderExtensions
     public static Task GetOcelotMiddlewareConfiguration(IApplicationBuilder builder)
     {
         var repo = builder.ApplicationServices.GetService<IInternalConfigurationRepository>();
-        var config = repo.Get();
-        var administrationPath = config?.Data?.AdministrationPath;
+        var config = repo!.Get();
+        var administrationPath = config?.AdministrationPath ?? string.Empty;
         var administration = builder.ApplicationServices.GetService<IAdministrationPath>();
-        if (administration.ExternalJwtSigningUrl != null)
+        if (administration?.ExternalJwtSigningUrl != null)
         {
             builder.UseOcelotJwtServer(administration.ExternalJwtSigningUrl); // UseIdentityServer();
         }
-        if (administrationPath.IsNotEmpty() && administration.Path.IsNotEmpty())
+        if (administrationPath.IsNotEmpty() && (administration?.Path).IsNotEmpty())
         {
             builder.Map(administrationPath, AddOcelotAdministrationControllers);
         }

@@ -2,13 +2,9 @@
 
 namespace Ocelot.Cache.CacheManager;
 
-public class OcelotCacheManagerCache<T> : IOcelotCache<T>
+public class OcelotCacheManagerCache<T>(ICacheManager<T> cacheManager) : IOcelotCache<T>
 {
-    private readonly ICacheManager<T> _manager;
-    public OcelotCacheManagerCache(ICacheManager<T> cacheManager)
-    {
-        _manager = cacheManager;
-    }
+    private readonly ICacheManager<T> _manager = cacheManager;
 
     public bool Add(string key, T value, string region, TimeSpan ttl)
     {

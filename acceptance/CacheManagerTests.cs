@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Ocelot.Configuration.File;
 using Ocelot.DependencyInjection;
 using Ocelot.Testing;
+using Shouldly;
 using System.Net;
 using System.Text;
 using TestStack.BDDfy;
@@ -248,10 +249,7 @@ public sealed class CacheManagerTests : AcceptanceSteps
                     : x.WithDictionaryHandle()),
             WithUseOcelot);
 
-    private static void GivenTheCacheExpires()
-    {
-        Thread.Sleep(1000);
-    }
+    private Task GivenTheCacheExpires() => Task.Delay(1000, CancelMe);
 
     private void GivenTheServiceNowReturns(int port, HttpStatusCode statusCode, string responseBody, string key, object value)
     {
@@ -269,7 +267,7 @@ public sealed class CacheManagerTests : AcceptanceSteps
             }
 
             context.Response.StatusCode = (int)statusCode;
-            return context.Response.WriteAsync(responseBody);
+            return context.Response.WriteAsync(responseBody, context.RequestAborted);
         });
     }
 
@@ -280,17 +278,14 @@ public sealed class CacheManagerTests : AcceptanceSteps
         handler.GivenThereIsAServiceRunningOn(port, async context =>
         {
             using var streamReader = new StreamReader(context.Request.Body);
-            var requestBody = await streamReader.ReadToEndAsync();
+            var requestBody = await streamReader.ReadToEndAsync(context.RequestAborted);
             _counter++;
             context.Response.StatusCode = (int)HttpStatusCode.OK;
-            await context.Response.WriteAsync(requestBody);
+            await context.Response.WriteAsync(requestBody, context.RequestAborted);
         });
     }
 
-    private void ThenTheCounterValueShouldBe(int expected)
-    {
-        Assert.Equal(expected, _counter);
-    }
+    private void ThenTheCounterValueShouldBe(int expected) => _counter.ShouldBe(expected);
 
     public static (string TestBody1String, string TestBody2String) TestBodiesFactory()
     {

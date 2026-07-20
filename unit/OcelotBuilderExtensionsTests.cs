@@ -18,6 +18,8 @@ public class OcelotBuilderExtensionsTests : Unit
     private readonly int _maxRetries;
     private Exception? _ex;
 
+    public override CancellationToken CancelMe => TestContext.Current.CancellationToken;
+
     public OcelotBuilderExtensionsTests()
     {
         _configRoot = new ConfigurationRoot([]);

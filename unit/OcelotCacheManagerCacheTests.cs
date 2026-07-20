@@ -16,6 +16,8 @@ public class OcelotCacheManagerCacheTests : Unit
 
     protected static readonly TimeSpan TTL = TimeSpan.FromSeconds(1);
 
+    public override CancellationToken CancelMe => TestContext.Current.CancellationToken;
+
     [Fact]
     public void Add()
     {
