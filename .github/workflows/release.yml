@@ -82,11 +82,10 @@ jobs:
         run: dotnet restore ./Ocelot.Cache.CacheManager.slnx
       - name: Pack project
         run: dotnet pack ./src/Ocelot.Cache.CacheManager.csproj --configuration Release --output ./packages /p:ContinuousIntegrationBuild=true
-      # - name: Publish to GitHub Packages
-      #   run: dotnet nuget push ./packages/*.nupkg --source "https://nuget.pkg.github.com/ThreeMammals/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
-      # - name: Publish to NuGet
-      #   run: dotnet nuget push ./packages/*.nupkg --source "https://api.nuget.org/v3/index.json" --api-key ${{ secrets.NUGET_API_KEY_2025 }} --skip-duplicate
-
+      - name: Publish to GitHub Packages
+        run: dotnet nuget push ./packages/*.nupkg --source "https://nuget.pkg.github.com/ThreeMammals/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+      - name: Publish to NuGet
+        run: dotnet nuget push ./packages/*.nupkg --source "https://api.nuget.org/v3/index.json" --api-key ${{ secrets.NUGET_API_KEY_2025 }} --skip-duplicate
       - name: GitHub Release
         uses: softprops/action-gh-release@v3 # https://github.com/softprops/action-gh-release
         env:
@@ -96,12 +95,11 @@ jobs:
         with:
           # tag_name: 0.0.3 # Name of a tag. defaults to github.ref_name
           body: |
-            ## Version [${{ env.PACKAGE_VERSION }}](https://www.nuget.org/packages/Ocelot.Cache.CacheManager/${{ env.PACKAGE_VERSION }})
-            > For Ocelot release: [${{ env.OCELOT_VERSION }}](https://github.com/ThreeMammals/Ocelot/releases/tag/${{ env.OCELOT_VERSION }})
-            > Ocelot package: v[${{ env.OCELOT_VERSION }}](https://www.nuget.org/packages/Ocelot/${{ env.OCELOT_VERSION }})
-            > CacheManager.Core package: v[${{ env.CACHEMANAGER_VERSION }}](https://www.nuget.org/packages/CacheManager.Core/${{ env.CACHEMANAGER_VERSION }})
+            ## Version [${{ env.PACKAGE_VERSION }}](https://www.nuget.org/packages/Ocelot.Cache.CacheManager/${{ env.PACKAGE_VERSION }}) for Ocelot release v[${{ env.OCELOT_VERSION }}](https://github.com/ThreeMammals/Ocelot/releases/tag/${{ env.OCELOT_VERSION }})
+            - Ocelot package: v[${{ env.OCELOT_VERSION }}](https://www.nuget.org/packages/Ocelot/${{ env.OCELOT_VERSION }})
+            - CacheManager.Core package: v[${{ env.CACHEMANAGER_VERSION }}](https://www.nuget.org/packages/CacheManager.Core/${{ env.CACHEMANAGER_VERSION }})
 
-            For more details, see Ocelot [Releases](https://github.com/ThreeMammals/Ocelot/releases) &rarr; [${{ env.OCELOT_VERSION }}](https://www.nuget.org/packages/Ocelot/${{ env.OCELOT_VERSION }}) &rarr; **What's Updated?** &rarr; **Administration**
+            For more details, see the Ocelot [releases](https://github.com/ThreeMammals/Ocelot/releases) &rarr; specifically [${{ env.OCELOT_VERSION }}](https://github.com/ThreeMammals/Ocelot/releases/tag/${{ env.OCELOT_VERSION }})
           files: |
             packages/*.*pkg
           prerelease: false

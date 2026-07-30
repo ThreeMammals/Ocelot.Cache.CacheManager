@@ -8,7 +8,6 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>CS1591</NoWarn>
-
     <!--Package properties-->
     <Version>25.0.0-beta.4</Version>
     <PackageId>Ocelot.Cache.CacheManager</PackageId>
@@ -32,13 +31,13 @@
     <None Include="..\README.md" Pack="true" PackagePath="\" Link="package\README.md" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Ocelot" Version="25.0.0-beta.3" />
+    <PackageReference Include="Ocelot" Version="25.0.0" />
     <PackageReference Include="CacheManager.Core" Version="3.0.0" />
     <PackageReference Include="CacheManager.Microsoft.Extensions.Configuration" Version="3.0.0" />
     <PackageReference Include="CacheManager.Serialization.Json" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.10" />
   </ItemGroup>
 </Project>
