@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>CS1591</NoWarn>
     <!--Package properties-->
-    <Version>25.0.0-beta.4</Version>
+    <Version>25.0.2-beta.1</Version>
     <PackageId>Ocelot.Cache.CacheManager</PackageId>
     <PackageDescription>Provides Ocelot extensions to use CacheManager.NET</PackageDescription>
     <PackageReleaseNotes>https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/releases</PackageReleaseNotes>
@@ -31,13 +31,13 @@
     <None Include="..\README.md" Pack="true" PackagePath="\" Link="package\README.md" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Ocelot" Version="25.0.0" />
+    <PackageReference Include="Ocelot" Version="25.0.2" />
     <PackageReference Include="CacheManager.Core" Version="3.0.0" />
     <PackageReference Include="CacheManager.Microsoft.Extensions.Configuration" Version="3.0.0" />
     <PackageReference Include="CacheManager.Serialization.Json" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.10" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.13" />
   </ItemGroup>
 </Project>
