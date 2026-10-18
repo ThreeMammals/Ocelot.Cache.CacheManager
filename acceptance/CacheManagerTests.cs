@@ -6,7 +6,6 @@ using Ocelot.Testing;
 using Shouldly;
 using System.Net;
 using System.Text;
-using TestStack.BDDfy;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Ocelot.Cache.CacheManager.Acceptance;
@@ -21,7 +20,7 @@ public sealed class CacheManagerTests : AcceptanceSteps
     { }
 
     [Fact]
-    public void Should_return_cached_response()
+    public async Task Should_return_cached_response()
     {
         var port = PortFinder.GetRandomPort();
         var options = new FileCacheOptions
@@ -30,22 +29,21 @@ public sealed class CacheManagerTests : AcceptanceSteps
         };
         var configuration = GivenFileConfiguration(port, options);
 
-        this.Given(x => x.GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, null, null))
-            .And(x => GivenThereIsAConfiguration(configuration))
-            .And(x => GivenOcelotIsRunningWithCacheManager())
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Laura))
-            .Given(x => x.GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, null, null))
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Laura))
-            .And(x => ThenTheContentLengthIs(Hello_from_Laura.Length))
-            .BDDfy();
+        GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, null, null);
+        GivenThereIsAConfiguration(configuration);
+        await GivenOcelotIsRunningWithCacheManager();
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Laura);
+        GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, null, null);
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Laura);
+        ThenTheContentLengthIs(Hello_from_Laura.Length);
     }
 
     [Fact]
-    public void Should_return_cached_response_with_expires_header()
+    public async Task Should_return_cached_response_with_expires_header()
     {
         var port = PortFinder.GetRandomPort();
         var options = new FileCacheOptions
@@ -54,23 +52,22 @@ public sealed class CacheManagerTests : AcceptanceSteps
         };
         var configuration = GivenFileConfiguration(port, options);
         var headerExpires = "Expires";
-        this.Given(x => x.GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, headerExpires, "-1"))
-            .And(x => GivenThereIsAConfiguration(configuration))
-            .And(x => GivenOcelotIsRunningWithCacheManager())
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Laura))
-            .Given(x => x.GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, null, null))
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Laura))
-            .And(x => ThenTheContentLengthIs(Hello_from_Laura.Length))
-            .And(x => ThenTheResponseContentHeaderIs(headerExpires, "-1"))
-            .BDDfy();
+        GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, headerExpires, "-1");
+        GivenThereIsAConfiguration(configuration);
+        await GivenOcelotIsRunningWithCacheManager();
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Laura);
+        GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, null, null);
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Laura);
+        ThenTheContentLengthIs(Hello_from_Laura.Length);
+        ThenTheResponseContentHeaderIs(headerExpires, "-1");
     }
 
     [Fact]
-    public void Should_return_cached_response_when_using_jsonserialized_cache()
+    public async Task Should_return_cached_response_when_using_jsonserialized_cache()
     {
         var port = PortFinder.GetRandomPort();
         var options = new FileCacheOptions
@@ -79,21 +76,20 @@ public sealed class CacheManagerTests : AcceptanceSteps
         };
         var configuration = GivenFileConfiguration(port, options);
 
-        this.Given(x => x.GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, null, null))
-            .And(x => GivenThereIsAConfiguration(configuration))
-            .And(x => x.GivenOcelotIsRunningWithCacheManager(true))
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Laura))
-            .Given(x => x.GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, null, null))
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Laura))
-            .BDDfy();
+        GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, null, null);
+        GivenThereIsAConfiguration(configuration);
+        await GivenOcelotIsRunningWithCacheManager(true);
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Laura);
+        GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, null, null);
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Laura);
     }
 
     [Fact]
-    public void Should_not_return_cached_response_as_ttl_expires()
+    public async Task Should_not_return_cached_response_as_ttl_expires()
     {
         var port = PortFinder.GetRandomPort();
         var options = new FileCacheOptions
@@ -102,18 +98,17 @@ public sealed class CacheManagerTests : AcceptanceSteps
         };
         var configuration = GivenFileConfiguration(port, options);
 
-        this.Given(x => x.GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, null, null))
-            .And(x => GivenThereIsAConfiguration(configuration))
-            .And(x => GivenOcelotIsRunningWithCacheManager())
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Laura))
-            .Given(x => x.GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, null, null))
-            .And(x => GivenTheCacheExpires())
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Tom))
-            .BDDfy();
+        GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, null, null);
+        GivenThereIsAConfiguration(configuration);
+        await GivenOcelotIsRunningWithCacheManager();
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Laura);
+        GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, null, null);
+        await GivenTheCacheExpires();
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Tom);
     }
 
     [Theory]
@@ -121,7 +116,7 @@ public sealed class CacheManagerTests : AcceptanceSteps
     [InlineData(false)]
     [Trait("Feat", "2058")] // https://github.com/ThreeMammals/Ocelot/pull/2058
     [Trait("Bug", "2059")] // https://github.com/ThreeMammals/Ocelot/issues/2059
-    public void Should_return_different_cached_response_when_request_body_changes_and_EnableContentHashing_is_true(bool asGlobalConfig)
+    public async Task Should_return_different_cached_response_when_request_body_changes_and_EnableContentHashing_is_true(bool asGlobalConfig)
     {
         var port = PortFinder.GetRandomPort();
         var options = new FileCacheOptions
@@ -132,23 +127,22 @@ public sealed class CacheManagerTests : AcceptanceSteps
         var (testBody1String, testBody2String) = TestBodiesFactory();
         var configuration = GivenFileConfiguration(port, options, asGlobalConfig, HttpMethods.Post);
 
-        this.Given(x => x.GivenThereIsAnEchoServiceRunningOn(port))
-            .And(x => GivenThereIsAConfiguration(configuration))
-            .And(x => GivenOcelotIsRunningWithCacheManager())
-            .When(x => WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody1String, Encoding.UTF8, "application/json")))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(testBody1String))
-            .When(x => WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody2String, Encoding.UTF8, "application/json")))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(testBody2String))
-            .When(x => WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody1String, Encoding.UTF8, "application/json")))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(testBody1String))
-            .When(x => WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody2String, Encoding.UTF8, "application/json")))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(testBody2String))
-            .And(x => ThenTheCounterValueShouldBe(2))
-            .BDDfy();
+        GivenThereIsAnEchoServiceRunningOn(port);
+        GivenThereIsAConfiguration(configuration);
+        await GivenOcelotIsRunningWithCacheManager();
+        await WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody1String, Encoding.UTF8, "application/json"));
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(testBody1String);
+        await WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody2String, Encoding.UTF8, "application/json"));
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(testBody2String);
+        await WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody1String, Encoding.UTF8, "application/json"));
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(testBody1String);
+        await WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody2String, Encoding.UTF8, "application/json"));
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(testBody2String);
+        ThenTheCounterValueShouldBe(2);
     }
 
     [Theory]
@@ -156,38 +150,34 @@ public sealed class CacheManagerTests : AcceptanceSteps
     [InlineData(false)]
     [Trait("Feat", "2058")]
     [Trait("Bug", "2059")]
-    public void Should_return_same_cached_response_when_request_body_changes_and_EnableContentHashing_is_false(bool asGlobalConfig)
+    public async Task Should_return_same_cached_response_when_request_body_changes_and_EnableContentHashing_is_false(bool asGlobalConfig)
     {
         var port = PortFinder.GetRandomPort();
-        var options = new FileCacheOptions
-        {
-            TtlSeconds = 100,
-        };
+        var options = new FileCacheOptions(100);
         var (testBody1String, testBody2String) = TestBodiesFactory();
         var configuration = GivenFileConfiguration(port, options, asGlobalConfig, HttpMethods.Post);
 
-        this.Given(x => x.GivenThereIsAnEchoServiceRunningOn(port))
-            .And(x => GivenThereIsAConfiguration(configuration))
-            .And(x => GivenOcelotIsRunningWithCacheManager())
-            .When(x => WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody1String, Encoding.UTF8, "application/json")))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(testBody1String))
-            .When(x => WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody2String, Encoding.UTF8, "application/json")))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(testBody1String))
-            .When(x => WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody1String, Encoding.UTF8, "application/json")))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(testBody1String))
-            .When(x => WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody2String, Encoding.UTF8, "application/json")))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(testBody1String))
-            .And(x => ThenTheCounterValueShouldBe(1))
-            .BDDfy();
+        GivenThereIsAnEchoServiceRunningOn(port);
+        GivenThereIsAConfiguration(configuration);
+        await GivenOcelotIsRunningWithCacheManager();
+        await WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody1String, Encoding.UTF8, "application/json"));
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(testBody1String);
+        await WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody2String, Encoding.UTF8, "application/json"));
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(testBody1String);
+        await WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody1String, Encoding.UTF8, "application/json"));
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(testBody1String);
+        await WhenIPostUrlOnTheApiGateway("/", new StringContent(testBody2String, Encoding.UTF8, "application/json"));
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(testBody1String);
+        ThenTheCounterValueShouldBe(1);
     }
 
     [Fact]
-    [Trait("Issue", "1172")]
-    public void Should_clean_cached_response_by_cache_header_via_new_caching_key()
+    [Trait("Feat", "1172")] // https://github.com/ThreeMammals/Ocelot/pull/1172
+    public async Task Should_clean_cached_response_by_cache_header_via_new_caching_key()
     {
         var port = PortFinder.GetRandomPort();
         var options = new FileCacheOptions
@@ -200,28 +190,27 @@ public sealed class CacheManagerTests : AcceptanceSteps
         var headerExpires = "Expires";
 
         // Add to cache
-        this.Given(x => x.GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, headerExpires, options.TtlSeconds))
-            .And(x => GivenThereIsAConfiguration(configuration))
-            .And(x => GivenOcelotIsRunningWithCacheManager())
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Laura))
+        GivenThereIsAServiceRunningOn(port, HttpStatusCode.OK, Hello_from_Laura, headerExpires, options.TtlSeconds);
+        GivenThereIsAConfiguration(configuration);
+        await GivenOcelotIsRunningWithCacheManager();
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Laura);
 
-            // Read from cache
-            .Given(x => x.GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, headerExpires, options.TtlSeconds / 2))
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Laura))
-            .And(x => ThenTheContentLengthIs(Hello_from_Laura.Length))
+        // Read from cache
+        GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, headerExpires, options.TtlSeconds / 2);
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Laura);
+        ThenTheContentLengthIs(Hello_from_Laura.Length);
 
-            // Clean cache by the header and cache new content
-            .Given(x => x.GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, headerExpires, -1))
-            .And(x => GivenIAddAHeader(options.Header, "123"))
-            .When(x => WhenIGetUrlOnTheApiGateway("/"))
-            .Then(x => ThenTheStatusCodeShouldBe(HttpStatusCode.OK))
-            .And(x => ThenTheResponseBodyShouldBe(Hello_from_Tom))
-            .And(x => ThenTheContentLengthIs(Hello_from_Tom.Length))
-            .BDDfy();
+        // Clean cache by the header and cache new content
+        GivenTheServiceNowReturns(port, HttpStatusCode.OK, Hello_from_Tom, headerExpires, -1);
+        GivenIAddAHeader(options.Header, "123");
+        await WhenIGetUrlOnTheApiGateway("/");
+        ThenTheStatusCodeShouldBe(HttpStatusCode.OK);
+        ThenTheResponseBodyShouldBe(Hello_from_Tom);
+        ThenTheContentLengthIs(Hello_from_Tom.Length);
     }
 
     private FileConfiguration GivenFileConfiguration(int port, FileCacheOptions cacheOptions, bool asGlobalConfig = false, params string[] methods)
