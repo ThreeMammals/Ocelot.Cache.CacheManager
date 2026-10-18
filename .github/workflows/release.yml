@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
@@ -20,6 +21,7 @@ jobs:
             8.0.x
             9.0.x
             10.0.x
+
       - name: .NET Info
         run: dotnet --info
 
@@ -27,6 +29,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install libxml2-utils xmlstarlet
+
       - name: Read XML
         id: xml
         run: |
@@ -39,6 +42,7 @@ jobs:
           xml_value=$(xmllint --xpath "string((//Project/ItemGroup)[2]/PackageReference[@Include='CacheManager.Core']/@Version)" ./src/Ocelot.Cache.CacheManager.csproj)
           echo CacheManager.Core Ref Ver: $xml_value
           echo "CacheManagerRefVer=$xml_value" >> $GITHUB_OUTPUT
+
       # Replace Version, PackageReleaseNotes in .csproj
       - name: Update XML in .csproj
         id: ver
@@ -68,6 +72,7 @@ jobs:
           xmlstarlet ed -L -u "//Project/PropertyGroup/PackageReleaseNotes" -v "$new_value" ./src/Ocelot.Cache.CacheManager.csproj
           xml_value=$(xmllint --xpath "string(//Project/PropertyGroup/PackageReleaseNotes)" ./src/Ocelot.Cache.CacheManager.csproj)
           echo Replaced PackageReleaseNotes: $xml_value
+
       - name: README.md
         run: |
           # Replaces relative GitHub paths with NuGet-friendly absolute URLs
@@ -80,12 +85,16 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore ./Ocelot.Cache.CacheManager.slnx
+
       - name: Pack project
         run: dotnet pack ./src/Ocelot.Cache.CacheManager.csproj --configuration Release --output ./packages /p:ContinuousIntegrationBuild=true
+
       - name: Publish to GitHub Packages
         run: dotnet nuget push ./packages/*.nupkg --source "https://nuget.pkg.github.com/ThreeMammals/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
       - name: Publish to NuGet
         run: dotnet nuget push ./packages/*.nupkg --source "https://api.nuget.org/v3/index.json" --api-key ${{ secrets.NUGET_API_KEY_2025 }} --skip-duplicate
+
       - name: GitHub Release
         uses: softprops/action-gh-release@v3 # https://github.com/softprops/action-gh-release
         env:
@@ -104,6 +113,7 @@ jobs:
             packages/*.*pkg
           prerelease: false
           make_latest: true
+
       # - name: Release to Ocelot Repo
       #   uses: softprops/action-gh-release@v3 # https://github.com/softprops/action-gh-release
       #   if: github.ref_type == 'tag'

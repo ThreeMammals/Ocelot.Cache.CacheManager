@@ -20,11 +20,15 @@ jobs:
           echo "dotnet10_installed=false" >> $GITHUB_ENV
         fi
     - name: Setup .NET 10
-      if: env.dotnet10_installed == 'false'
+      # if: env.dotnet10_installed == 'false'
       uses: actions/setup-dotnet@v6 # https://github.com/actions/setup-dotnet
       with:
         dotnet-version: 10.0.x
         dotnet-quality: 'ga'
+
+    - name: .NET Info
+      run: dotnet --info
+
     - name: Checkout
       uses: actions/checkout@v7 # https://github.com/actions/checkout
     - name: Restore
@@ -32,7 +36,10 @@ jobs:
     - name: Build
       run: dotnet build --no-restore ./Ocelot.Cache.CacheManager.slnx --framework net10.0
     - name: Unit tests
-      run: dotnet test --no-restore --no-build ./unit/Ocelot.Cache.CacheManager.UnitTests.csproj --collect:"XPlat Code Coverage" --framework net10.0
+      run: |
+        dotnet test --no-restore --no-build --framework net10.0 --project ./unit/Ocelot.Cache.CacheManager.UnitTests.csproj \
+          --results-directory ./unit/TestResults --output Detailed --coverlet --coverlet-include "[Ocelot*]*"
+
     - name: Acceptance tests
       run: dotnet test --no-restore --no-build ./acceptance/Ocelot.Cache.CacheManager.Acceptance.csproj --collect:"XPlat Code Coverage" --framework net10.0
     - name: Find files
