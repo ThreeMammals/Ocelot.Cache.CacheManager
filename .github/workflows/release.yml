@@ -108,29 +108,30 @@ jobs:
             - Ocelot package: v[${{ env.OCELOT_VERSION }}](https://www.nuget.org/packages/Ocelot/${{ env.OCELOT_VERSION }})
             - CacheManager.Core package: v[${{ env.CACHEMANAGER_VERSION }}](https://www.nuget.org/packages/CacheManager.Core/${{ env.CACHEMANAGER_VERSION }})
 
-            For more details, see the Ocelot [releases](https://github.com/ThreeMammals/Ocelot/releases) &rarr; specifically [${{ env.OCELOT_VERSION }}](https://github.com/ThreeMammals/Ocelot/releases/tag/${{ env.OCELOT_VERSION }})
+            For more details, see the Ocelot [releases](https://github.com/ThreeMammals/Ocelot/releases) &rarr; [${{ env.OCELOT_VERSION }}](https://github.com/ThreeMammals/Ocelot/releases/tag/${{ env.OCELOT_VERSION }})
           files: |
             packages/*.*pkg
           prerelease: false
           make_latest: true
 
-      # - name: Release to Ocelot Repo
-      #   uses: softprops/action-gh-release@v3 # https://github.com/softprops/action-gh-release
-      #   if: github.ref_type == 'tag'
-      #   env:
-      #     PACKAGE_TAG: ${{ github.ref_name }}
-      #     PACKAGE_VERSION: ${{ steps.ver.outputs.PkgVersion }}
-      #     OCELOT_VERSION: ${{ steps.xml.outputs.OcelotRefVer }}
-      #   with:
-      #     repository: ThreeMammals/Ocelot
-      #     token: ${{ secrets.OCELOT_EXTENSION_PACKAGE_RELEASE_TOKEN }}
-      #     name: Ocelot.Cache.CacheManager ${{ env.PACKAGE_TAG }}
-      #     tag_name: ocm${{ env.PACKAGE_VERSION }}
-      #     target_commitish: develop # top commit must contain updated docs
-      #     body: |
-      #       ## Ocelot.Cache.CacheManager version [${{ env.PACKAGE_VERSION }}](https://www.nuget.org/packages/Ocelot.Cache.CacheManager/${{ env.PACKAGE_VERSION }})
-      #       > Ocelot release: [${{ env.OCELOT_VERSION }}](https://github.com/ThreeMammals/Ocelot/releases/tag/${{ env.OCELOT_VERSION }})
-      #       > Ocelot.Cache.CacheManager release: [${{ env.PACKAGE_VERSION }}](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/releases/tag/${{ env.PACKAGE_TAG }})
-      #     files: |
-      #       packages/*.*pkg
-      #     prerelease: true
+      - name: Release to Ocelot Repo
+        uses: softprops/action-gh-release@v3 # https://github.com/softprops/action-gh-release
+        if: github.ref_type == 'tag'
+        env:
+          PACKAGE_TAG: ${{ github.ref_name }}
+          PACKAGE_VERSION: ${{ steps.ver.outputs.PkgVersion }}
+          OCELOT_VERSION: ${{ steps.xml.outputs.OcelotRefVer }}
+        with:
+          repository: ThreeMammals/Ocelot
+          token: ${{ secrets.OCELOT_EXTENSION_PACKAGE_RELEASE_TOKEN }}
+          name: ${{ env.PACKAGE_VERSION }} Ocelot.Cache.CacheManager
+          tag_name: ${{ env.PACKAGE_VERSION }}-Cache.CacheManager
+          target_commitish: develop # top commit must contain updated docs
+          body: |
+            ## `Ocelot.Cache.CacheManager` version [${{ env.PACKAGE_VERSION }}](https://www.nuget.org/packages/Ocelot.Cache.CacheManager/${{ env.PACKAGE_VERSION }})
+            - Ocelot release: [${{ env.OCELOT_VERSION }}](https://github.com/ThreeMammals/Ocelot/releases/tag/${{ env.OCELOT_VERSION }})
+            - Ocelot.Cache.CacheManager release: [${{ env.PACKAGE_VERSION }}](https://github.com/ThreeMammals/Ocelot.Cache.CacheManager/releases/tag/${{ env.PACKAGE_TAG }})
+          files: |
+            packages/*.*pkg
+          prerelease: false
+          make_latest: false
